@@ -10,7 +10,7 @@ api_key = st.secrets.get("GOOGLE_API_KEY")
 if api_key:
     genai.configure(api_key=api_key)
     # Alinhado com o motor que você ativou
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-1.5-flash-latest')
 else:
     st.error("Erro Crítico: A chave GOOGLE_API_KEY não foi encontrada no Secrets.")
     st.stop()

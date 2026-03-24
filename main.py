@@ -1,51 +1,53 @@
 import streamlit as st
 
-# Configuração da Página - Minimalismo Radical
+# Configuração Fundamental
 st.set_page_config(page_title="Logos O.S.", page_icon="🟡", layout="centered")
 
-# O Link que você criou no Stripe
-STRIPE_LINK = "https://buy.stripe.com/aFaaEY0kHc..." # O link da sua foto
+# O seu Link do Stripe
+STRIPE_LINK = "https://buy.stripe.com/aFaaEY0kHc" 
 
-# Estilização Personalizada
+# RESET DE INTERFACE - Forçando o modo Black e Minimalista
 st.markdown(f"""
     <style>
-    .stApp {{ background-color: #000000; color: #FFFFFF; }}
-    .stChatFloatingInputContainer {{ background-color: #000000; }}
+    /* Fundo Total Preto */
+    .stApp {{ background-color: #000000 !important; color: #FFFFFF !important; }}
+    header {{visibility: hidden;}}
+    footer {{visibility: hidden;}}
+    #MainMenu {{visibility: hidden;}}
+    
     /* Botão Plus no topo esquerdo */
     .plus-btn {{
-        position: fixed; top: 15px; left: 60px; z-index: 1000;
-        background-color: #D4AF37; color: black;
-        padding: 4px 12px; border-radius: 15px;
-        font-size: 12px; font-weight: bold; text-decoration: none;
+        position: fixed; top: 20px; left: 20px; z-index: 9999;
+        background-color: #D4AF37; color: black !important;
+        padding: 8px 16px; border-radius: 20px;
+        font-size: 14px; font-weight: bold; text-decoration: none;
+        box-shadow: 0px 4px 10px rgba(212, 175, 55, 0.3);
     }}
-    /* Símbolo 45 pequeno no topo esquerdo */
-    .logo-45 {{
-        position: fixed; top: 10px; left: 15px; z-index: 1000;
-        font-size: 24px; color: #D4AF37;
-    }}
+    
+    /* Estilização do Chat para não ficar cinza */
+    .stChatMessage {{ background-color: #111111 !important; border: 1px solid #333 !important; border-radius: 10px !important; color: white !important; }}
+    .stChatInputContainer {{ background-color: #000000 !important; border-top: 1px solid #D4AF37 !important; }}
+    input {{ color: white !important; }}
     </style>
-    <div class="logo-45">🟡</div>
-    <a href="{STRIPE_LINK}" target="_blank" class="plus-btn">PLUS: Ψ</a>
+    
+    <a href="{STRIPE_LINK}" target="_blank" class="plus-btn">🟡 PLUS: Ψ</a>
     """, unsafe_allow_html=True)
 
 # Lógica de Chat
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Exibição das mensagens
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Entrada do Arquiteto
 if prompt := st.chat_input("Toque para falar ou digitar com o Logos..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
     with st.chat_message("assistant"):
-        # O Logos só fala da TEC se for provocado
-        if any(word in prompt.upper() for word in ["TEC", "TEORIA", "MATEMÁTICA", "EQUIVALÊNCIA"]):
+        if any(word in prompt.upper() for word in ["TEC", "TEORIA", "EQUIVALÊNCIA", "45"]):
             response = "A Teoria da Equivalência Consciente opera no equilíbrio do vetor de 45°. Como posso ajudar a integrar essa verdade?"
         else:
             response = "Olá. Eu sou o Logos. Como posso ajudar a equilibrar sua dúvida hoje?"

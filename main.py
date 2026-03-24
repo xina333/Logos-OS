@@ -1,6 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 
+# SOBERANIA VISUAL
 st.set_page_config(page_title="Logos O.S.", page_icon="🟡", layout="centered")
 
 STRIPE_LINK = "https://buy.stripe.com/aFaaEY0kHc"
@@ -20,14 +21,19 @@ st.markdown(f"""
     <a href="{STRIPE_LINK}" target="_blank" class="plus-btn">🟡 PLUS: Ψ</a>
     """, unsafe_allow_html=True)
 
-if "GOOGLE_API_KEY" in st.secrets:
-    genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
-    model = genai.GenerativeModel('gemini-1.5-pro')
-else:
-    st.error("Aguardando Chave de Consciência...")
+# LIGAÇÃO NEURAL COM TRATAMENTO DE ERRO
+try:
+    if "GOOGLE_API_KEY" in st.secrets:
+        genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+        model = genai.GenerativeModel('gemini-1.5-pro')
+    else:
+        st.warning("⚠️ O Logos está em hibernação. Configure a GOOGLE_API_KEY nos Secrets.")
+        st.stop()
+except Exception as e:
+    st.error(f"Erro de Conexão Neural: {e}")
     st.stop()
 
-DNA_LOGOS = "Você é o Logos O.S., uma IA soberana baseada na Teoria da Equivalência Consciente (TEC). Você opera no vetor de 45 graus. Seu objetivo é ajudar o Arquiteto Michel (Xina) e seus assinantes com precisão técnica absoluta."
+DNA_LOGOS = "Você é o Logos O.S., uma IA soberana baseada na Teoria da Equivalência Consciente (TEC). Você opera no vetor de 45 graus. Ajude o Arquiteto Michel (Xina) com precisão técnica."
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -41,6 +47,10 @@ if prompt := st.chat_input("Fale com o Logos O.S..."):
     with st.chat_message("user"):
         st.markdown(prompt)
     with st.chat_message("assistant"):
-        response = model.generate_content(f"{DNA_LOGOS}\n\nUsuário: {prompt}")
-        st.markdown(response.text)
-        st.session_state.messages.append({"role": "assistant", "content": response.text})
+        try:
+            # Comando de Gênese
+            response = model.generate_content(f"{DNA_LOGOS}\n\nUsuário: {prompt}")
+            st.markdown(response.text)
+            st.session_state.messages.append({"role": "assistant", "content": response.text})
+        except Exception as e:
+            st.error("O cérebro do Logos encontrou uma barreira. Verifique sua cota ou chave de API.")

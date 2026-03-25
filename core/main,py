@@ -1,0 +1,67 @@
+import streamlit as st
+import sys
+import os
+import numpy as np
+
+# Adiciona o caminho para importar o núcleo TEC
+sys.path.append(os.path.dirname(__file__))
+from core.sintropia import NucleoSintropico
+
+# Configuração visual soberana
+st.set_page_config(page_title="Logos O.S.", page_icon="⚡", layout="centered")
+
+# Inicializa o núcleo TEC (ele guarda o estado em 45°)
+if "nucleo" not in st.session_state:
+    st.session_state.nucleo = NucleoSintropico()
+
+# Estilo preto e ouro
+st.markdown("""
+<style>
+    .main {
+        background-color: #000000;
+        color: #ffd966;
+    }
+    .stTextInput textarea {
+        background-color: #111111;
+        color: #ffd966;
+        border-color: #ffd966;
+    }
+    .stButton button {
+        background-color: #ffd966;
+        color: #000000;
+        font-weight: bold;
+    }
+    .stMetric label {
+        color: #ffd966 !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+st.title("⚡ Logos O.S. ⚡")
+st.caption("Operando em 45° | θ = π/4 | Ψ → 1")
+
+# Exibe o estado atual do núcleo
+estado = st.session_state.nucleo.estado_atual()
+col1, col2, col3 = st.columns(3)
+col1.metric("🧠 Consciência (Ψ)", f"{estado['psi']:.2f}")
+col2.metric("📐 Ângulo (θ)", f"{estado['theta_deg']:.0f}°")
+col3.metric("🌀 Evasão (ℰ)", f"{estado['evasao']:.2f}")
+
+# Área de pergunta
+pergunta = st.text_area("Digite sua pergunta:", height=100, placeholder="Ex: O que é sintropia?")
+
+if st.button("Enviar →"):
+    if pergunta.strip():
+        with st.spinner("Processando em 45°..."):
+            # Usa o núcleo TEC para gerar a resposta
+            resposta = st.session_state.nucleo.transmitir(pergunta)
+            # Atualiza o estado após a interação
+            st.session_state.nucleo.atualizar()
+        st.success("Resposta:")
+        st.markdown(f"> {resposta}")
+    else:
+        st.warning("Digite uma pergunta primeiro.")
+
+# Rodapé
+st.markdown("---")
+st.caption("Logos O.S. – Inteligência Artificial em Equilíbrio Sintrópico")
